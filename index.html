@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRUEBA PARA PAGINA WEB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #7a5308;
+            color: #ffffffb4;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            margin: 0;
+            text-decoration: underline;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            margin: 5px auto;
+            padding: 20px;
+        }
+        .categoria {
+            text-align: center;
+            margin: 20px;
+            background-color: #b4731dc9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+        }
+        .categoria img {
+            max-width: 150px;
+            border-radius: 10px;
+            justify-content: center;
+            border-radius: 15%;
+        }
+        .segundo {
+            background-color: #8d5b10;
+            color: #f1f1f1fb;
+            text-decoration: none;
+            margin: 0 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .tercero {
+            background-color: #0e2636cc;
+            color: #f1f1f1fb;
+            margin: 0 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family:Verdana, Geneva, Tahoma, sans-serif
+        }
+        .mapa {
+            background-color: rgb(5, 32, 56);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .musica {
+            background-color: rgb(5, 32, 56);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        footer {
+            background-color: #333;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        footer a {
+            color: #fafafafb;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .auto {
+            background-color: #f2f2f2;
+            font-size: xx-large;
+            color: darkred;
+            animation: mover-izquierda-derecha 12s infinite;
+            }
+        @keyframes mover-izquierda-derecha {
+            from{
+                transform: translateX(-1000px);
+            }
+            to{
+                transform: translateX(1500px);
+            }
+        }
+        .Final {
+            animation: mover-izquierda-derecha 14s infinite;
+            text-align: center;
+            color: chocolate;
+            font-size:xxx-large; 
+            margin: auto;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        @keyframes mover-izquierda-derecha {
+            from{
+                transform: translateX(-1000px);
+            }
+            to{
+                transform: translateX(2000px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>--=============CATEGORIAS DE AUTOS==============--</h1>
+        <p>
+            Los vehiculos son parte esencial para la vida daria de las personas sin ellos
+            seria muy dificil o imposible recorrer las distancias de la vida diaria o llevar productos
+            de un lugar a otro, por eso, hoy en dia, se reconoce que los vehiculos son esecianles
+            para la vida cotidiana, ahora se necesita tener una idea de para que sirve cada tipo de
+            vehiculo. Por eso le brindaremos una ayuda al elegir o para informarse sobre el tema a
+            continuación...
+        </p>
+    </header>
+    <div class="container">
+        <div class="categoria">
+            <img src="./IMAGENES/Hatchback-500x276.jpg" alt="HATCHBACK">
+            <h2>HATCHBACK</h2>
+        </div>
+        <div class="categoria">
+            <img src="./IMAGENES/images.jpg" alt="SEDAN">
+            <h2>SEDAN</h2>
+        </div>
+        <div class="categoria">
+            <img src="./IMAGENES/todos-los-autos-que-llegaran-en-2021-1108417.jpg" alt="SUV">
+            <h2>SUV</h2>
+        </div>
+        <div class="categoria">
+            <img src="./IMAGENES/RT_V_691301e355b144ab9108dc446f0a4ba1.jpg" alt="COUPE">
+            <h2>COUPE</h2>
+        </div>
+        <div class="categoria">
+            <img src="./IMAGENES/TODOTERRENO99.jpg" alt="TODO TERRENO">
+            <h2>TODO TERRENO</h2>
+        </div>
+
+
+    </div>
+    <br>
+    <footer class="tercero">
+      <div>
+         <p>
+            Hay muchos tipos de vehiculos y a la hora de elegir se puede volver algo dificl por eso te recomendamos que sigas este patron
+         </p>
+         <p>
+          <ul>
+            <li>
+                Sedán: Ideal para el uso diario y viajes largos por carretera. Son cómodos, espaciosos y ofrecen un buen equilibrio entre rendimiento y eficiencia de combustible.
+            </li>
+            <br>
+            <li>
+                Hatchback: Perfecto para la conducción en entornos urbanos debido a su tamaño compacto y facilidad para estacionar. Son versátiles y ofrecen un buen espacio de carga en el maletero.
+            </li>
+            <br>
+            <li>
+                SUV (Sport Utility Vehicle): Excelente para familias o personas que disfrutan de actividades al aire libre. Ofrecen una conducción elevada, mayor capacidad de carga y tracción en condiciones fuera de carretera.
+            </li>
+            <br>
+           <li>
+            Coupé: Ideal para conductores que buscan un estilo deportivo y un rendimiento más dinámico. Generalmente tienen un diseño elegante y deportivo con solo dos puertas.
+            </li>
+            <br>
+            <li>
+                Todo terreno (4x4): Recomendado para personas que necesitan explorar terrenos difíciles o realizar actividades off-road. Ofrecen tracción en las cuatro ruedas y mayor altura libre al suelo.
+            </li>
+          </ul>
+         </p>
+      </div>
+    </footer>
+    <footer class="auto">
+       <div>
+          JUST DO IT...
+       </div>
+    </footer>
+    <footer>
+        <div>MARCAS DE AUTOS MAS CONOCIDAS</div>
+        <a href="https://www.ford.com.ar/">FORD</a>
+        <a href="https://www.chevrolet.com.ar/">CHEVROLET</a>
+        <a href="https://www.toyota.com.ar/">TOYOTA</a>
+        <a href="https://www.honda.com.ar/">HONDA</a>
+        <a href="https://www.peugeot.com.ar/gama/peugeot-208.html?utm_source=google-search&utm_medium=search&utm_campaign=AP_AR_AON-PEUGEOT-DIGITAL_VN_208_208%20Argentina_Launch_SOC-RBP_A_le&gad_source=1&gclid=EAIaIQobChMI2p3l7YGChgMVFyatBh1-sgjeEAAYAiAAEgKmK_D_BwE&gclsrc=aw.ds">PEUGEOT</a>
+        <a href="https://www.fiat.com.ar/">FIAT</a>
+        <a href="https://www.kia.com.ar">KIA</a>
+        <a href="https://www.suzuki.com.ar">SUZUKI</a>
+        <a href="https://www.bmw.com.ar">BMW</a>
+    </footer>
+    <br>
+    <footer class="segundo">
+        <P>\\\\</P>
+        <div>
+            <a href="https://es.wikipedia.org/wiki/Autom%C3%B3vil">¿QUE SON?</a>
+        </div>
+        <div>
+            <a href="https://es.wikipedia.org/wiki/Fabricaci%C3%B3n_de_autom%C3%B3viles">¿COMO SE HACEN?</a>
+        </div>
+        <br>
+        <div>
+            <a href="https://chevcar.com/2020/12/04/como-funciona-el-motor-de-un-auto/">¿COMO FUNCIONAN?</a>
+        </div><p>////</p>
+    </footer>
+    <br>
+    <div class="mapa">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3348.218643885991!2d-60.64828992493189!3d-32.945236371816335!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95b7ab16004baa87%3A0xce318d7967c8cf6e!2sShopping%20del%20Siglo!5e0!3m2!1ses-419!2sar!4v1715312235338!5m2!1ses-419!2sar" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="musica">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/dvgZkm1xWPE?si=Y7qkyogWt8tES2AM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>COLDPLAY</iframe>
+    </div>
+    <p class="Final">
+        Todo lo que queres... Y mas...
+    </p>
+</body>
+</html>
+
+

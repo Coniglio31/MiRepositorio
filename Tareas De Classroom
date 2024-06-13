@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javascript pruebas</title>
+</head>
+<body>
+    <script>
+        var n1=prompt ("ingrese numero de coordenada x");
+        var n2=prompt ("ingrese numero de coordenada y");
+        if (n1>0 & n2>0) {
+            document.write ("las coordenadas corresponden al primer cuadrante.");
+        } else {
+            
+            if (n1>0 & n2<0) {
+
+                document.write ("las coordenadas corresponden al cuarto cuadrante.");
+                
+            } else {
+                if (n1<0 & n2>0) {
+                    
+                    document.write ("las coordenadas corresponden al segundo cuadrante.");
+
+
+            
+                    
+                   } else {
+                    if (n1<0 & n2<0) {
+                        document.write ("las coordenadas corresponden al tercer cuadrante.");
+                        
+                    } else {
+                        
+                        document.write ("las coordenadas corresponden al el/ los ejes de coordenadas.");
+
+                    }
+                   }
+                }
+            }
+    </script>
+</body>
+</html>

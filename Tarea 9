@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pago de horas extras</title>
+</head>
+<body>
+    <h1>Pago de horas extras</h1>
+    <p>Ingrese la categoría del trabajador (1-4):</p>
+    <input type="number" id="categoria" placeholder="Categoría">
+    <p>Ingrese el sueldo base del trabajador:</p>
+    <input type="number" id="sueldo" placeholder="Sueldo base">
+    <p>Ingrese las horas extras trabajadas:</p>
+    <input type="number" id="horas" placeholder="Horas extras">
+    <button onclick="calcularPago()">Calcular pago</button>
+    <p id="resultado"></p>
+    <script>
+        function calcularPago() {
+            var categoria = document.getElementById("categoria").value;
+            var sueldo = document.getElementById("sueldo").value;
+            var horas = document.getElementById("horas").value;
+
+            var precioHoraExtra = 0;
+            switch (categoria) {
+                case "1":
+                    precioHoraExtra = 30;
+                    break;
+                case "2":
+                    precioHoraExtra = 38;
+                    break;
+                case "3":
+                    precioHoraExtra = 50;
+                    break;
+                case "4":
+                    precioHoraExtra = 70;
+                    break;
+                default:
+                    document.getElementById("resultado").innerHTML = "Categoría inválida.";
+                   return;
+            }
+            var pagoHorasExtras = horas * precioHoraExtra;
+            var pagoTotal = parseFloat(sueldo) + parseFloat(pagoHorasExtras);
+            document.getElementById("resultado").innerHTML = "El pago total al trabajador es: $" + pagoTotal.toFixed(2);
+        }
+    </script>
+</body>

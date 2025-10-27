@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Juego - Armar la PC con TunTun y Tralalelo</title>
+    <style>
+        :root {
+            --bg: #071020;
+            --card: #0b1226;
+            --muted: #94a3b8;
+            --text: #e6eef6;
+            --accent: #34d399;
+            --accent2: #60a5fa;
+            --danger: #fb7185;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+            background: linear-gradient(180deg, #041021 0%, #07102a 100%);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .app {
+            width: min(1100px, 98%);
+        }
+
+        .card {
+            background: linear-gradient(180deg, #071425, #0b1226);
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .6);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #041022;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        p.lead {
+            margin: 6px 0 14px;
+            color: var(--muted);
+        }
+
+        .stage {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .stage .dot {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #071424;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            font-weight: 700;
+        }
+
+        .stage .dot.active {
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            color: #041022;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .grid.cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .card-panel {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .component {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            cursor: pointer;
+            transition: transform .18s, box-shadow .18s;
+        }
+
+        .component:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 26px rgba(0, 0, 0, .5);
+        }
+
+        .component img {
+            width: 84px;
+            height: 84px;
+            object-fit: contain;
+        }
+
+        .component .name {
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .component .info {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .component.selected {
+            outline: 3px solid var(--accent2);
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        button.primary {
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            color: #041022;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 0;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        button.primary:disabled {
+            background: linear-gradient(90deg, #4b6b9b, #4b9b7b);
+            cursor: not-allowed;
+        }
+
+        button.secondary {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .build {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .pyramid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .pyrow {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .row1 { width: 350px; }
+        .row2 { width: 350px; justify-content: space-around; }
+
+        .slot {
+            border-radius: 8px;
+            border: 2px dashed rgba(255, 255, 255, 0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 12px;
+            padding: 5px;
+            width: 100px;
+            height: 80px;
+            position: relative;
+        }
+
+        .slot.clickable {
+            cursor: pointer;
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .slot.clickable:hover {
+            background: rgba(52, 211, 153, 0.1);
+            border-color: rgba(52, 211, 153, 0.6);
+        }
+
+        .slot.filled {
+            border: 2px solid var(--accent);
+            animation: snapIn 0.3s ease-out;
+        }
+
+        .drop-bad {
+            border-color: rgba(251, 113, 133, .6);
+            background: rgba(251, 113, 133, .03);
+        }
+
+        .arena {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 12px;
+        }
+
+        .screen {
+            background: linear-gradient(180deg, #020617, #061022);
+            padding: 12px;
+            border-radius: 12px;
+            min-height: 360px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .virus-card {
+            position: absolute;
+            right: 22px;
+            top: 42px;
+            text-align: center;
+        }
+
+        .virus-card .art {
+            width: 140px;
+            height: 140px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .virus-card .art img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        .virus-hp {
+            margin-top: 8px;
+            color: var(--muted);
+        }
+
+        .player-card {
+            position: absolute;
+            left: 18px;
+            bottom: 18px;
+            text-align: center;
+        }
+
+        .player-card .art {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-card .art img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        .hud {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 999px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .bar > span {
+            display: block;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #fb7185, #f97316);
+        }
+
+        .controls {
+            padding: 12px;
+            background: linear-gradient(180deg, #071227, #071827);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .skill {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            margin-bottom: 8px;
+            background: linear-gradient(180deg, #061426, #071427);
+            cursor: pointer;
+        }
+
+        .skill .name {
+            font-weight: 800;
+        }
+
+        .skill .info {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .win {
+            padding: 14px;
+            background: linear-gradient(90deg, #34d399, #60a5fa);
+            color: #041022;
+            border-radius: 12px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .confetti {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .confetti span {
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            border-radius: 2px;
+            animation: fall 1.6s linear forwards;
+        }
+
+        .progress {
+            margin-top: 8px;
+            font-size: 14px;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-20px) rotate(0); }
+            to { transform: translateY(380px) rotate(540deg); opacity: 0; }
+        }
+
+        @keyframes snapIn {
+            0% { transform: scale(0.8); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 10px var(--accent); }
+            50% { box-shadow: 0 0 20px var(--accent); }
+            100% { box-shadow: 0 0 10px var(--accent); }
+        }
+
+        .footer {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="card">
+            <div class="header">
+                <div class="logo">AI</div>
+                <div>
+                    <h1>Armar la PC — Aprende con TunTun y Tralalelo</h1>
+                    <p class="lead">¡Descubre partes de la PC y defiende contra virus! Tres fases educativas.</p>
+                </div>
+            </div>
+
+            <div class="stage" id="stages">
+                <div class="dot active" id="s1">Fase 1</div>
+                <div class="dot" id="s2">Fase 2</div>
+                <div class="dot" id="s3">Fase 3</div>
+            </div>
+
+            <div class="container">
+                <!-- FASE 1 -->
+                <div id="fase1" class="grid">
+                    <div class="card-panel">
+                        <h2>Fase 1 — Reconocer con TunTun</h2>
+                        <p class="muted">¡Hacé clic en cada parte para aprender! Estudiá todas para avanzar.</p>
+                        <div class="grid cols-4" id="comp-grid"></div>
+                        <div class="actions"><button class="primary" id="goto2" disabled>Estoy listo — Ir a armar</button><button class="secondary" id="reset1">Reiniciar</button></div>
+                    </div>
+                </div>
+
+                <!-- FASE 2 -->
+                <div id="fase2" style="display:none">
+                    <div class="card-panel build">
+                        <div class="cabinet pyramid" id="cabinet">
+                            <div class="pyrow row1">
+                                <div class="slot" data-slot="Placa de video">Placa de video</div>
+                                <div class="slot" data-slot="Procesador">Procesador</div>
+                                <div class="slot" data-slot="RAM">RAM</div>
+                            </div>
+                            <div class="pyrow row2">
+                                <div class="slot" data-slot="Fuente de alimentación">Fuente</div>
+                                <div class="slot" data-slot="Disco Duro">Disco Duro</div>
+                                <div class="slot" data-slot="Motherboard">Motherboard</div>
+                                <div class="slot" data-slot="Gabinete">Gabinete</div>
+                            </div>
+                        </div>
+                        <div class="palette">
+                            <h3>Arma la pirámide con Tralalelo</h3>
+                            <p class="muted">¡Hacé clic en una pieza y luego en el lugar correcto en la pirámide!</p>
+                            <p class="progress" id="progress"></p>
+                            <div class="grid cols-4" id="comp-palette"></div>
+                            <div style="margin-top:8px">
+                                <button class="primary" id="checkBuild" disabled>Verificar armado</button>
+                                <button class="secondary" id="reset2">Reiniciar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FASE 3 -->
+                <div id="fase3" style="display:none">
+                    <div class="card-panel arena">
+                        <div class="screen" id="screen">
+                            <div class="hud">
+                                <div><strong>Virus: Tralalero Tralala</strong></div>
+                                <div class="bar"><span id="vbar" style="width:100%"></span></div>
+                            </div>
+                            <div class="virus-card">
+                                <div class="art" id="virusArt"><img src="Tung.png" alt="Tralalero" style="width:140px;height:140px;"></div>
+                                <div class="virus-hp muted" id="vhp">100%</div>
+                            </div>
+                            <div class="player-card">
+                                <div class="art" id="playerArt"></div>
+                                <div class="virus-hp muted" id="php">100%</div>
+                            </div>
+                            <div class="confetti" id="confetti"></div>
+                        </div>
+                        <div class="controls">
+                            <h3>Elegí tu antivirus</h3>
+                            <div id="antibox" style="display:flex;gap:8px;margin-bottom:10px"></div>
+                            <div id="skills"></div>
+                            <div style="margin-top:8px"><button class="secondary" id="restartBattle">Reiniciar batalla (R)</button><button class="secondary" id="resetGame" style="display:none;">Reiniciar Juego</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">Prototipo educativo — ¡Aprende jugando!</div>
+        </div>
+    </div>
+
+    <script>
+        // Datos con URLs de imágenes
+        const COMPONENTES = [
+            { id: 'Motherboard', name: 'Motherboard', img: '<img src="https://www.shutterstock.com/image-vector/computer-chip-technology-processor-circuit-600nw-1057010360.jpg" width="84" height="84">', info: 'TunTun: ¡La base!', fact: 'Conecta todo.' },
+            { id: 'Procesador', name: 'Procesador', img: '<img src="https://i.ytimg.com/vi/Q0-8NX9c4PE/maxresdefault.jpg" width="84" height="84">', info: 'TunTun: ¡El cerebro!', fact: 'Piensa y calcula.' },
+            { id: 'RAM', name: 'RAM', img: '<img src="https://i.ytimg.com/vi/4IEkCE5w-Tk/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDiSGwk0jl9O-AGIBDDwT2gxcL8Jg" width="84" height="84">', info: 'Tralalelo: ¡Memoria!', fact: 'Guarda datos rápidos.' },
+            { id: 'Placa de video', name: 'Placa de video', img: '<img src="https://thumbs.dreamstime.com/b/blue-yellow-computer-graphics-card-two-fans-cartoon-style-illustration-features-prominent-centers-black-blades-405145552.jpg" width="84" height="84">', info: 'Tralalelo: ¡Para juegos!', fact: 'Crea gráficos.' },
+            { id: 'Disco Duro', name: 'Disco Duro', img: '<img src="https://www.shutterstock.com/image-vector/mechanical-hard-drive-3d-illustration-260nw-1890810505.jpg" width="84" height="84">', info: 'TunTun: ¡Almacena!', fact: 'Guarda archivos.' },
+            { id: 'Fuente de alimentación', name: 'Fuente de alimentación', img: '<img src="https://pics.clipartpng.com/Standard_Computer_Power_Supply_PNG_Clipart-774.png" width="84" height="84">', info: 'Tralalelo: ¡Energía!', fact: 'Da poder.' },
+            { id: 'Gabinete', name: 'Gabinete', img: '<img src="https://thumbs.dreamstime.com/b/desktop-computer-cartoon-illustration-isolated-image-setup-includes-monitor-light-blue-screen-keyboard-placed-386153839.jpg" width="84" height="84">', info: 'TunTun: ¡Protege!', fact: 'Cuida las piezas.' }
+        ];
+
+        const ANTIVIRUS = [
+            { id: 'bailarina', name: 'Bailarina Capuchina', art: '<img src="https://media.craiyon.com/2025-05-05/fuHKvFoNTACAS4GxyggWYw.webp" width="120" height="120">', skills: [{ name: 'Danza', dmg: 18, desc: 'TunTun: ¡Golpe!' }, { name: 'Barrote', dmg: 10, desc: 'Tralalelo: ¡Defensa!' }], hp: 100 },
+            { id: 'bombardiro', name: 'Bombardiro Cocodrilo', art: '<img src="https://static.wikia.nocookie.net/memian-lore/images/8/8b/Bombardiro_crocodilo.jpg/revision/latest?cb=20250427142557" width="120" height="120">', skills: [{ name: 'Explosión', dmg: 24, desc: 'TunTun: ¡Fuerte!' }, { name: 'Mordida', dmg: 12, desc: 'Tralalelo: ¡Proteger!' }], hp: 100 },
+            { id: 'Tralalero', name: 'Tralalero Tralala', art: '<img src="Tralalero.png" width="120" height="120">', skills: [{ name: 'Código', dmg: 16, desc: 'TunTun: ¡Rápido!' }, { name: 'Reset', dmg: 8, desc: 'Tralalelo: ¡Baja!' }], hp: 100 }
+        ];
+
+        // Estado
+        let estudiados = new Set();
+        let placed = new Set();
+        let selectedAV = null;
+        let virusHP = 100;
+        let playerHP = 100;
+        let playerTurn = true;
+
+        // Helpers
+        const $ = s => document.querySelector(s);
+        const $$ = s => Array.from(document.querySelectorAll(s));
+        function setStage(n) { $('#s1').classList.toggle('active', n === 1); $('#s2').classList.toggle('active', n === 2); $('#s3').classList.toggle('active', n === 3); }
+
+        // FASE 1
+        function renderFase1() {
+            const grid = $('#comp-grid');
+            grid.innerHTML = '';
+            COMPONENTES.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'component';
+                div.innerHTML = `<div style="height:84px">${c.img}</div><div class="name">${c.name}</div><div class="info">${c.info}</div>`;
+                div.addEventListener('click', () => {
+                    estudiados.add(c.id);
+                    div.classList.add('selected');
+                    alert(c.fact);
+                    $('#goto2').disabled = estudiados.size < COMPONENTES.length;
+                });
+                grid.appendChild(div);
+            });
+            $('#reset1').addEventListener('click', () => { estudiados.clear(); renderFase1(); $('#goto2').disabled = true; });
+        }
+
+        $('#goto2').addEventListener('click', () => {
+            $('#fase1').style.display = 'none';
+            $('#fase2').style.display = 'block';
+            setStage(2);
+            renderFase2();
+        });
+
+        // FASE 2
+        function renderFase2() {
+            placed.clear();
+            const palette = $('#comp-palette');
+            palette.innerHTML = '';
+            $('#checkBuild').disabled = true;
+            $('#progress').textContent = `${placed.size}/${COMPONENTES.length} componentes colocados`;
+            
+            // Render component cards
+            COMPONENTES.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'component';
+                div.dataset.id = c.id;
+                div.innerHTML = `<div style="height:84px">${c.img}</div><div class="name">${c.name}</div><div class="info">${c.info}</div>`;
+                div.addEventListener('click', () => selectComponent(c.id));
+                palette.appendChild(div);
+            });
+
+            // Reset slots
+            $$('.slot').forEach(slot => {
+                slot.innerHTML = slot.dataset.slot;
+                slot.classList.remove('filled', 'clickable');
+                slot.replaceWith(slot.cloneNode(true)); // Remove old event listeners
+            });
+
+            // Re-select slots after cloning
+            $$('.slot').forEach(slot => {
+                slot.addEventListener('click', handleSlotClick);
+            });
+
+            let selectedComponent = null;
+
+            function selectComponent(id) {
+                selectedComponent = id;
+                $$('.component').forEach(c => c.classList.toggle('selected', c.dataset.id === id));
+                $$('.slot').forEach(slot => {
+                    if (!slot.classList.contains('filled')) {
+                        slot.classList.add('clickable');
+                    }
+                });
+            }
+
+            function handleSlotClick(e) {
+                const slot = e.currentTarget;
+                const accept = slot.dataset.slot;
+                if (!selectedComponent) return;
+                if (selectedComponent === accept) {
+                    slot.innerHTML = `${COMPONENTES.find(x => x.id === accept)?.img}<div style="font-weight:800;color:var(--accent)">${accept}</div>`;
+                    slot.classList.add('filled');
+                    slot.classList.remove('clickable');
+                    placed.add(accept);
+                    alert(`${COMPONENTES.find(x => x.id === accept)?.fact} ¡Bien hecho, amigo!`);
+                    $$('.component').find(c => c.dataset.id === accept)?.remove();
+                    $$('.slot').forEach(s => s.classList.remove('clickable'));
+                    $$('.component').forEach(c => c.classList.remove('selected'));
+                    selectedComponent = null;
+                    updateProgress();
+                    console.log('Placed:', Array.from(placed));
+                } else {
+                    slot.classList.add('drop-bad');
+                    setTimeout(() => slot.classList.remove('drop-bad'), 700);
+                    alert('¡Pieza incorrecta! Intenta otra. ¡Tralalelo tralala!');
+                }
+            }
+
+            function updateProgress() {
+                $('#progress').textContent = `${placed.size}/${COMPONENTES.length} componentes colocados`;
+                $('#checkBuild').disabled = placed.size !== COMPONENTES.length;
+                if (placed.size === COMPONENTES.length) {
+                    $('#cabinet').style.animation = 'glow 1.5s infinite';
+                    alert('¡Todas las piezas colocadas! Presiona "Verificar armado" para continuar.');
+                } else {
+                    $('#cabinet').style.animation = '';
+                }
+            }
+        }
+
+        $('#checkBuild').addEventListener('click', () => {
+            if (placed.size === COMPONENTES.length) {
+                alert('¡PC armada con éxito! ¡TunTun y Tralalelo están listos para la batalla!');
+                $('#fase2').style.display = 'none';
+                $('#fase3').style.display = 'block';
+                setStage(3);
+                renderFase3();
+            } else {
+                alert(`¡Falta completar la pirámide! Componentes: ${placed.size}/${COMPONENTES.length}`);
+            }
+        });
+
+        $('#reset2').addEventListener('click', () => {
+            placed.clear();
+            renderFase2();
+        });
+
+        // FASE 3
+        function renderFase3() {
+            const box = $('#antibox');
+            box.innerHTML = '';
+            ANTIVIRUS.forEach((a, i) => {
+                const b = document.createElement('button');
+                b.className = 'draggable';
+                b.style.width = '100%';
+                b.style.justifyContent = 'flex-start';
+                b.innerHTML = `${a.art}<div><div style="font-weight:800">${a.name}</div><div style="font-size:12px;color:var(--muted)">HP: ${a.hp}</div></div>`;
+                b.addEventListener('click', () => { selectAV(i); });
+                box.appendChild(b);
+            });
+            selectAV(0);
+        }
+
+        function selectAV(index) {
+            selectedAV = JSON.parse(JSON.stringify(ANTIVIRUS[index]));
+            $('#playerArt').innerHTML = selectedAV.art;
+            renderSkills();
+            resetBattle();
+        }
+
+        function renderSkills() {
+            const sk = $('#skills');
+            sk.innerHTML = '';
+            selectedAV.skills.forEach((s, i) => {
+                const div = document.createElement('div');
+                div.className = 'skill';
+                div.innerHTML = `<div><div class="name">${s.name}</div><div class="info">${s.desc}</div></div><div style="font-weight:900">DMG ${s.dmg}</div>`;
+                div.addEventListener('click', () => { if (playerTurn) playerAttack(i); });
+                sk.appendChild(div);
+            });
+        }
+
+        function resetBattle() {
+            virusHP = 100;
+            playerHP = selectedAV.hp;
+            playerTurn = true;
+            updateHUD();
+            $('#confetti').innerHTML = '';
+            $('#resetGame').style.display = 'none';
+        }
+
+        function updateHUD() {
+            $('#vbar').style.width = virusHP + '%';
+            $('#vhp').textContent = virusHP + '%';
+            $('#php').textContent = playerHP + '%';
+        }
+
+        function playerAttack(skillIndex) {
+            const sk = selectedAV.skills[skillIndex];
+            virusHP = Math.max(0, virusHP - sk.dmg);
+            animateHit(true);
+            updateHUD();
+            if (virusHP === 0) return onWin();
+            playerTurn = false;
+            setTimeout(() => virusAttack(), 800);
+        }
+
+        function virusAttack() {
+            const attacks = [
+                { name: 'Inyección', dmg: 12 },
+                { name: 'Corrupción', dmg: 16 },
+                { name: 'Risa', dmg: 10 }
+            ];
+            const atk = attacks[Math.floor(Math.random() * attacks.length)];
+            playerHP = Math.max(0, playerHP - atk.dmg);
+            animateHit(false);
+            updateHUD();
+            if (playerHP === 0) return onLose();
+            playerTurn = true;
+        }
+
+        function animateHit(byPlayer) {
+            const art = byPlayer ? $('#virusArt') : $('#playerArt');
+            art.style.transform = 'scale(0.92)';
+            setTimeout(() => art.style.transform = 'scale(1)', 160);
+        }
+
+        function onWin() {
+            $('#confetti').innerHTML = '';
+            for (let i = 0; i < 60; i++) {
+                const s = document.createElement('span');
+                s.style.left = (Math.random() * 100) + '%';
+                s.style.background = i % 3 ? '#60a5fa' : '#34d399';
+                s.style.animationDelay = (Math.random() * 0.8) + 's';
+                $('#confetti').appendChild(s);
+            }
+            setTimeout(() => $('#confetti').innerHTML = '', 1800);
+            $('#vbar').style.width = '0%';
+            $('#vhp').textContent = '¡Derrotado!';
+            const winMsg = document.createElement('div');
+            winMsg.className = 'win';
+            winMsg.textContent = '¡Ganaste! La PC está segura.';
+            document.querySelector('.controls').appendChild(winMsg);
+            $('#resetGame').style.display = 'block';
+        }
+
+        function onLose() {
+            const lose = document.createElement('div');
+            lose.className = 'win';
+            lose.style.background = 'linear-gradient(90deg,#fb7185,#f97316)';
+            lose.textContent = '¡Perdiste! Reinicia con TunTun.';
+            document.querySelector('.controls').appendChild(lose);
+            $('#resetGame').style.display = 'block';
+        }
+
+        $('#restartBattle').addEventListener('click', resetBattle);
+        $('#resetGame').addEventListener('click', () => {
+            estudiados.clear();
+            placed.clear();
+            selectedAV = null;
+            $('#fase1').style.display = 'block';
+            $('#fase2').style.display = 'none';
+            $('#fase3').style.display = 'none';
+            setStage(1);
+            renderFase1();
+            $('#resetGame').style.display = 'none';
+        });
+        window.addEventListener('keydown', e => { if (e.key.toLowerCase() === 'r' && $('#fase3').style.display !== 'none') resetBattle(); });
+
+        // Init
+        renderFase1();
+    </script>
+</body>
+</html>
